@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>fontène</title>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZV8R2QC4E"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-WZV8R2QC4E', {
+      'page_title': 'fontène - Landing Page'
+    });
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose: #F9CAC9; --rose-deep: #d9928f; --rose-pale: #fdf3f2;
+      --ink: #1a1210; --ink-soft: rgba(26,18,16,0.52); --ink-faint: rgba(26,18,16,0.1);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+    .view { display: none; opacity: 0; transition: opacity 0.35s ease; }
+    .view.active { display: block; opacity: 1; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: 64px; padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--ink-faint);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+    }
+    nav.hide { transform: translateY(-100%); opacity: 0; }
+    .nav-links { display: flex; gap: 36px; align-items: center; }
+    .nav-links a { font-size: 0.73rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; cursor: pointer; transition: color 0.2s; background: none; border: none; font-family: inherit; font-weight: 300; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-logo { cursor: pointer; }
+    .nav-logo img { height: 28px; display: block; }
+    .nav-badge { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); border: 1px solid var(--ink-faint); padding: 6px 14px; border-radius: 100px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--ink-faint); padding: 28px 32px; z-index: 299; flex-direction: column; gap: 24px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 1rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; text-align: left; }
+
+    .hero { min-height: 100vh; padding: 100px 52px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-left { display: flex; flex-direction: column; gap: 24px; }
+    .hero-logo { height: 40px; object-fit: contain; object-position: left; opacity: 0; animation: fadeUp 0.8s ease forwards 0.1s; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.67rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-soft); opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+    .eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--rose-deep); flex-shrink: 0; }
+    .form-wrap { opacity: 0; animation: fadeUp 0.9s ease forwards 0.32s; }
+    .form-label { font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px; display: block; }
+    .form-row { display: flex; border: 1.5px solid var(--ink-faint); border-radius: 3px; overflow: hidden; background: var(--rose-pale); transition: border-color 0.3s; }
+    .form-row:focus-within { border-color: var(--rose-deep); }
+    .form-row input { flex: 1; padding: 13px 16px; background: transparent; border: none; color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-size: 0.88rem; outline: none; }
+    .form-row input::placeholder { color: var(--ink-soft); }
+    .form-row button { padding: 13px 20px; background: var(--ink); border: none; color: white; font-family: 'Instrument Sans', sans-serif; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+    .form-row button:hover { background: #3a2a28; }
+    .form-note { margin-top: 8px; font-size: 0.68rem; color: var(--ink-soft); }
+    .success-msg { display: none; padding: 12px 16px; background: rgba(249,202,201,0.2); border: 1.5px solid var(--rose-deep); border-radius: 3px; font-size: 0.86rem; color: var(--ink); }
+    h1 { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(3rem, 5.2vw, 5.8rem); line-height: 1.04; opacity: 0; animation: fadeUp 0.9s ease forwards 0.52s; }
+    h1 em { font-style: italic; color: var(--rose-deep); }
+    .hero-desc { font-size: 0.97rem; line-height: 1.78; color: var(--ink-soft); max-width: 420px; opacity: 0; animation: fadeUp 0.9s ease forwards 0.68s; }
+    .stats { display: flex; gap: 32px; opacity: 0; animation: fadeUp 0.9s ease forwards 0.84s; }
+    .stat { display: flex; flex-direction: column; gap: 3px; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.3rem; font-weight: 300; line-height: 1; }
+    .stat-label { font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+    .hero-right { display: flex; justify-content: center; align-items: center; background: #fff; opacity: 0; animation: fadeIn 1.1s ease forwards 0.4s; }
+    .hero-gif { width: 100%; max-width: 440px; mix-blend-mode: multiply; }
+
+    .band { background: var(--rose); padding: 20px 0; overflow: hidden; white-space: nowrap; border-top: 1px solid rgba(26,18,16,0.07); border-bottom: 1px solid rgba(26,18,16,0.07); }
+    .band-track { display: inline-flex; gap: 56px; animation: scrollBand 26s linear infinite; }
+    .band-item { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.25rem; font-weight: 300; color: var(--ink); display: flex; align-items: center; gap: 18px; }
+    .band-sep { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); opacity: 0.28; flex-shrink: 0; }
+    @keyframes scrollBand { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .h-scroll-outer { height: 400vh; position: relative; }
+    .h-scroll-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .h-scroll-track { display: flex; height: 100%; width: 300vw; will-change: transform; }
+    .h-panel { width: 100vw; height: 100vh; flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 60px 80px; gap: 80px; }
+    .h-panel:nth-child(1) { background: #fff; }
+    .h-panel:nth-child(2) { background: var(--rose-pale); }
+    .h-panel:nth-child(3) { background: #fff; }
+    .h-panel:nth-child(even) .panel-img { order: 2; }
+    .h-panel:nth-child(even) .panel-text { order: 1; }
+    .panel-img { display: flex; justify-content: center; align-items: center; }
+    .panel-img img { width: 160px; max-height: 260px; object-fit: contain; filter: drop-shadow(0 12px 28px rgba(26,18,16,0.12)) drop-shadow(0 0 0 transparent); mix-blend-mode: multiply; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .panel-img img:hover { transform: scale(1.06) rotate(-1.5deg); }
+    .panel-text { display: flex; flex-direction: column; gap: 20px; }
+    .panel-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 3.5vw, 3.8rem); font-weight: 300; line-height: 1.08; }
+    .panel-title em { font-style: italic; color: var(--rose-deep); }
+    .panel-title strong { font-weight: 600; }
+    .panel-desc { font-size: 0.92rem; line-height: 1.76; color: var(--ink-soft); max-width: 360px; }
+    .h-dots { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
+    .h-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); opacity: 0.18; transition: opacity 0.3s, transform 0.3s; }
+    .h-dot.active { opacity: 0.85; transform: scale(1.3); }
+    .scroll-hint { position: absolute; right: 48px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.35; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; transition: opacity 0.4s; pointer-events: none; }
+    .scroll-hint.gone { opacity: 0; }
+    .scroll-hint svg { animation: bounceRight 1.6s ease-in-out infinite; }
+    @keyframes bounceRight { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+
+    .values { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--ink-faint); }
+    .value-card { background: var(--rose-pale); padding: 56px 48px; display: flex; flex-direction: column; gap: 20px; cursor: pointer; transition: background 0.3s; }
+    .value-card:hover { background: #fff; }
+    .value-icon { width: 64px; height: 64px; object-fit: contain; mix-blend-mode: multiply; }
+    .value-title { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 400; line-height: 1.2; }
+    .value-desc { font-size: 0.87rem; line-height: 1.72; color: var(--ink-soft); max-width: 340px; }
+    .value-link { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rose-deep); margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+    .value-link::after { content: '→'; }
+
+    .crowd-section { padding: 100px 52px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .crowd-img { width: 100%; mix-blend-mode: multiply; }
+    .crowd-text { display: flex; flex-direction: column; gap: 22px; }
+    .crowd-text h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,3.5vw,3.4rem); font-weight: 300; line-height: 1.1; }
+    .crowd-text h2 em { font-style: italic; color: var(--rose-deep); }
+    .crowd-text p { font-size: 0.9rem; line-height: 1.78; color: var(--ink-soft); max-width: 380px; }
+    .btn-cta { display: inline-block; padding: 13px 28px; border: 1.5px solid var(--ink); border-radius: 2px; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; align-self: flex-start; background: none; font-family: 'Instrument Sans', sans-serif; font-weight: 300; }
+    .btn-cta:hover { background: var(--ink); color: #fff; }
+
+    /* ABOUT PAGE */
+    .page-hero { padding: 140px 52px 80px; background: var(--rose-pale); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; min-height: 55vh; }
+    .page-hero-left { display: flex; flex-direction: column; gap: 20px; }
+    .page-eyebrow { font-size: 0.67rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-soft); display: flex; align-items: center; gap: 10px; }
+    .page-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--rose-deep); }
+    h1.about-h1 { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(3rem, 6vw, 6.5rem); line-height: 0.95; opacity: 1; animation: none; }
+    h1.about-h1 em { font-style: italic; color: var(--rose-deep); }
+    h1.about-h1 strong { font-weight: 600; }
+    .page-intro { font-size: 1.05rem; line-height: 1.8; color: var(--ink-soft); max-width: 460px; }
+    .two-col-section { padding: 100px 52px; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; border-bottom: 1px solid var(--ink-faint); }
+    .sticky-label { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 12px; }
+    .section-tag { font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--rose-deep); }
+    .sticky-label h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; line-height: 1.15; }
+    .sticky-label h2 em { font-style: italic; }
+    .sticky-label h2 strong { font-weight: 600; }
+    .quote-block { background: var(--rose-pale); border-left: 2px solid var(--rose-deep); padding: 36px 40px; border-radius: 0 4px 4px 0; position: relative; margin-bottom: 32px; }
+    .quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 5rem; line-height: 0.6; color: var(--rose); position: absolute; top: 24px; left: 32px; pointer-events: none; }
+    .quote-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.18rem; line-height: 1.82; color: var(--ink); padding-top: 16px; }
+    .quote-text p + p { margin-top: 20px; }
+    .fable-body { font-size: 0.95rem; line-height: 1.85; color: var(--ink-soft); }
+    .fable-body p + p { margin-top: 20px; }
+    .crowd-divider { width: 100%; overflow: hidden; height: 400px; position: relative; }
+    .crowd-divider img { width: 100%; height: 100%; object-fit: cover; object-position: center top; mix-blend-mode: multiply; }
+    .crowd-divider-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(253,243,242,0.7) 0%, transparent 40%, transparent 60%, rgba(253,243,242,0.7) 100%); }
+    .timeline { display: flex; flex-direction: column; }
+    .timeline-item { display: grid; grid-template-columns: 100px 1fr; gap: 32px; padding: 36px 0; border-bottom: 1px solid var(--ink-faint); opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-year { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--rose-deep); line-height: 1; padding-top: 4px; }
+    .timeline-content h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; margin-bottom: 10px; }
+    .timeline-content p { font-size: 0.9rem; line-height: 1.78; color: var(--ink-soft); }
+    .timeline-content p em { font-style: italic; }
+    .timeline-content p strong { color: var(--ink); font-weight: 500; }
+    .engagement-section { padding: 100px 52px; background: var(--rose-pale); }
+    .engagement-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; margin-bottom: 72px; }
+    .engagement-header-left { display: flex; flex-direction: column; gap: 12px; }
+    .engagement-header-left h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; line-height: 1.15; }
+    .engagement-header-left h2 em { font-style: italic; }
+    .engagement-intro { font-size: 1rem; line-height: 1.8; color: var(--ink-soft); }
+    .engagement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(26,18,16,0.08); }
+    .engagement-card { background: var(--rose-pale); padding: 44px 36px; display: flex; flex-direction: column; gap: 16px; transition: background 0.3s; }
+    .engagement-card:hover { background: #fff; }
+    .engagement-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; line-height: 1.2; }
+    .engagement-card p { font-size: 0.87rem; line-height: 1.72; color: var(--ink-soft); }
+    .founders-content { font-size: 0.95rem; line-height: 1.85; color: var(--ink-soft); }
+    .founders-content p + p { margin-top: 20px; }
+    .founders-content strong { color: var(--ink); font-weight: 500; }
+    .cta-section { padding: 100px 52px; background: var(--ink); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px; }
+    .cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,4vw,4rem); font-weight: 300; color: #fff; line-height: 1.1; }
+    .cta-section h2 em { font-style: italic; color: var(--rose); }
+    .cta-section p { font-size: 0.95rem; color: rgba(255,255,255,0.55); max-width: 480px; line-height: 1.72; }
+    .btn-rose { display: inline-block; padding: 15px 36px; background: var(--rose); border-radius: 2px; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); cursor: pointer; transition: background 0.2s; font-family: 'Instrument Sans', sans-serif; border: none; }
+    .btn-rose:hover { background: var(--rose-deep); color: #fff; }
+
+    footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 36px 52px; display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; letter-spacing: 0.08em; }
+    .footer-logo { height: 24px; filter: invert(1); cursor: pointer; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links, .nav-badge { display: none; }
+      .hamburger { display: flex; }
+      .hero { grid-template-columns: 1fr; padding: 88px 24px 60px; min-height: auto; gap: 36px; }
+      .hero-right { order: -1; }
+      .hero-gif { max-width: 260px; }
+      .h-scroll-outer { height: auto; }
+      .h-scroll-sticky { position: relative; height: auto; overflow: visible; }
+      .h-scroll-track { flex-direction: column; width: 100%; height: auto; transform: none !important; }
+      .h-panel { width: 100%; height: auto; grid-template-columns: 1fr; padding: 52px 24px; gap: 32px; }
+      .h-panel:nth-child(even) .panel-img, .h-panel:nth-child(even) .panel-text { order: unset; }
+      .panel-img img { width: 130px; }
+      .scroll-hint, .h-dots { display: none; }
+      .values { grid-template-columns: 1fr; }
+      .value-card { padding: 40px 24px; }
+      .crowd-section { grid-template-columns: 1fr; padding: 60px 24px; gap: 36px; }
+      .page-hero { grid-template-columns: 1fr; padding: 100px 24px 60px; min-height: auto; gap: 32px; }
+      .two-col-section { grid-template-columns: 1fr; padding: 60px 24px; gap: 40px; }
+      .sticky-label { position: static; }
+      .engagement-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
+      .engagement-section { padding: 60px 24px; }
+      .engagement-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 72px 1fr; gap: 20px; }
+      .crowd-divider { height: 240px; }
+      .cta-section { padding: 72px 24px; }
+      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-links">
+    <a onclick="showView('home')" id="nav-home" class="active">Accueil</a>
+    <a onclick="gtag('event','select_content',{'event_label':'card_histoire'}); showView('about')" id="nav-about">À propos</a>
+    <a onclick="showView('home'); setTimeout(()=>document.getElementById('community').scrollIntoView({behavior:'smooth'}),50)">Communauté</a>
+    <a onclick="showView('home'); setTimeout(()=>document.getElementById('contact').scrollIntoView({behavior:'smooth'}),50)">Contact</a>
+  </div>
+  <div class="nav-logo" onclick="showView('home')">
+    <img src="https://i.ibb.co/cS1ttMY9/IMG-0168.jpg" alt="fontène"/>
+  </div>
+  <div class="nav-badge">Bientôt disponible</div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showView('home'); toggleMenu()">Accueil</a>
+  <a onclick="showView('about'); toggleMenu()">À propos</a>
+  <a onclick="showView('home'); toggleMenu(); setTimeout(()=>document.getElementById('community').scrollIntoView({behavior:'smooth'}),50)">Communauté</a>
+  <a onclick="showView('home'); toggleMenu(); setTimeout(()=>document.getElementById('contact').scrollIntoView({behavior:'smooth'}),50)">Contact</a>
+</div>
+
+<!-- VIEW HOME -->
+<div class="view active" id="view-home">
+  <section class="hero">
+    <div class="hero-left">
+      <img class="hero-logo" src="https://i.ibb.co/cS1ttMY9/IMG-0168.jpg" alt="fontène"/>
+      <div class="eyebrow"><span class="eyebrow-dot"></span>Lancement — Printemps 2026</div>
+      <div class="form-wrap" id="formWrap">
+        <span class="form-label">Rejoindre la liste en avant-première</span>
+        <div class="form-row" id="formRow">
+          <input type="email" id="emailInput" placeholder="votre@email.com" autocomplete="email"/>
+          <button onclick="handleSubmit()">Je m'inscris</button>
+        </div>
+        <div class="success-msg" id="successMsg">✦ Bienvenue dans l'aventure fontène — on vous prévient en premier.</div>
+        <p class="form-note">Aucun spam, jamais. Juste l'essentiel.</p>
+      </div>
+      <h1>La boisson<br>qui donne<br><em>soif de vivre</em></h1>
+      <p class="hero-desc">fontène, c'est une boisson pétillante naturelle pensée pour les moments qui comptent vraiment. Ceux qu'on partage, ceux dont on se souvient.</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">6%</div><div class="stat-label">Alcool</div></div>
+        <div class="stat"><div class="stat-num">1</div><div class="stat-label">Saveur</div></div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Formats</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img class="hero-gif" src="https://i.ibb.co/60C6LdnM/Design-sans-titre.gif" alt="fontène"/>
+    </div>
+  </section>
+
+  <div class="band">
+    <div class="band-track">
+      <div class="band-item">Naturellement pétillant <span class="band-sep"></span></div>
+      <div class="band-item">Sans sucre ajouté <span class="band-sep"></span></div>
+      <div class="band-item">6% alc. <span class="band-sep"></span></div>
+      <div class="band-item">Servi en cannette ou en pression <span class="band-sep"></span></div>
+      <div class="band-item">Origine France <span class="band-sep"></span></div>
+      <div class="band-item">Fait pour être partagé <span class="band-sep"></span></div>
+      <div class="band-item">Naturellement pétillant <span class="band-sep"></span></div>
+      <div class="band-item">Sans sucre ajouté <span class="band-sep"></span></div>
+      <div class="band-item">6% alc. <span class="band-sep"></span></div>
+      <div class="band-item">Servi en cannette ou en pression <span class="band-sep"></span></div>
+      <div class="band-item">Origine France <span class="band-sep"></span></div>
+      <div class="band-item">Fait pour être partagé <span class="band-sep"></span></div>
+    </div>
+  </div>
+
+  <div class="h-scroll-outer" id="hScrollOuter">
+    <div class="h-scroll-sticky">
+      <div class="h-scroll-track" id="hScrollTrack">
+        <div class="h-panel">
+          <div class="panel-img"><img src="https://i.ibb.co/xSmzvHtC/IMG-0162.jpg" alt="Rosé"/></div>
+          <div class="panel-text">
+            <h2 class="panel-title"><strong>LA</strong> couleur<br>d'un <em>rosé</em><br><strong>DE PROVENCE</strong></h2>
+            <p class="panel-desc">Cette teinte rosée pâle, dorée et lumineuse. L'œil reconnaît une promesse avant même le premier sip.</p>
+          </div>
+        </div>
+        <div class="h-panel">
+          <div class="panel-img"><img src="https://i.ibb.co/GjtV0Wv/IMG-0163.jpg" alt="Bière"/></div>
+          <div class="panel-text">
+            <h2 class="panel-title"><strong>LA</strong> fraîcheur<br>d'une <em>pinte</em><br><strong>DE BIÈRE</strong></h2>
+            <p class="panel-desc">Cette effervescence vive, ce froid qui saisit. Une carbonatation franche, une désaltération immédiate.</p>
+          </div>
+        </div>
+        <div class="h-panel">
+          <div class="panel-img"><img src="https://i.ibb.co/20jtY5k9/IMG-0171.jpg" alt="Cocktail"/></div>
+          <div class="panel-text">
+            <h2 class="panel-title"><strong>LE</strong> fruité<br>des <em>meilleurs</em><br><strong>COCKTAILS</strong></h2>
+            <p class="panel-desc">Des arômes naturels de fruits, une rondeur en bouche qui surprend. Complexe sans être compliqué.</p>
+          </div>
+        </div>
+      </div>
+      <div class="h-dots">
+        <div class="h-dot active" id="dot0"></div>
+        <div class="h-dot" id="dot1"></div>
+        <div class="h-dot" id="dot2"></div>
+      </div>
+      <div class="scroll-hint" id="scrollHint">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span>Défiler</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="values">
+    <div class="value-card" onclick="gtag('event','select_content',{'event_label':'card_engagement'}); showView('about','engagement')">
+      <img class="value-icon" src="https://i.ibb.co/XftcWx1k/IMG-0167.jpg" alt="globe"/>
+      <div class="value-title">Engagement<br>environnemental</div>
+      <p class="value-desc">Packaging 100 % recyclable, sourcing local, empreinte carbone réduite à chaque étape.</p>
+      <div class="value-link">En savoir plus</div>
+    </div>
+    <div class="value-card" onclick="gtag('event','select_content',{'event_label':'card_histoire'}); showView('about')">
+      <img class="value-icon" src="https://i.ibb.co/MyVzvLjw/IMG-0166.jpg" alt="connexion"/>
+      <div class="value-title">Créé pour<br>les moments vrais</div>
+      <p class="value-desc">fontène naît de l'envie de retrouver une boisson honnête, sans artifice, à partager sans s'en excuser.</p>
+      <div class="value-link">Notre histoire</div>
+    </div>
+  </section>
+
+  <section class="crowd-section" id="community">
+    <img class="crowd-img" src="https://i.ibb.co/V0ypFXsr/IMG-0165.jpg" alt="La communauté fontène"/>
+    <div class="crowd-text">
+      <h2>Une boisson,<br>une <em>communauté</em></h2>
+      <p>fontène, c'est aussi une façon de se retrouver. Que ce soit sur une terrasse, après un effort, ou juste parce que le moment s'y prête — on pétille ensemble.</p>
+      <p>Rejoignez les premiers à vivre l'expérience, à donner votre avis, à façonner ce que fontène deviendra.</p>
+      <button class="btn-cta" onclick="scrollToForm()">Rejoindre l'aventure</button>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <img class="footer-logo" src="https://i.ibb.co/cS1ttMY9/IMG-0168.jpg" alt="fontène" onclick="showView('home')"/>
+    <span>© 2026 fontène — Tous droits réservés</span>
+    <span>Fait avec 🫧 en France</span>
+  </footer>
+</div>
+
+<!-- VIEW ABOUT -->
+<div class="view" id="view-about">
+  <div class="page-hero">
+    <div class="page-hero-left">
+      <div class="page-eyebrow">Notre histoire</div>
+      <h1 class="about-h1"><strong>LA</strong> fable<br>de la <em>fontène</em></h1>
+    </div>
+    <div class="page-hero-right">
+      <p class="page-intro">Une soirée d'été au bord de la Garonne. Un regard qui ne s'oubliera jamais. Et une boisson née de l'élan de vivre pleinement les moments qui comptent.</p>
+    </div>
+  </div>
+
+  <section class="two-col-section">
+    <div class="sticky-label">
+      <div class="section-tag">La légende</div>
+      <h2>Boire la<br>vie en <em>rose</em></h2>
+    </div>
+    <div>
+      <div class="quote-block">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">
+          <p>C'était une soirée d'été, le soleil était en train de se coucher et offrait ses derniers rayons à tous les passants qui longeaient le bord de la Garonne. Un jeune étudiant, beau garçon aux yeux pétillants était venu se rafraichir avec des amis. Il fût troublé par le regard d'une étrangère resplendissante qui était attablée. Elle venait des pays du nord, là où les femmes ont les cheveux blonds comme les blés. Ce regard il ne l'oubliera jamais.</p>
+          <p>Porté par l'énergie, il l'approcha et lui proposa de prolonger ce moment autour d'un verre qu'elle déclina… elle n'aimait ni la bière ni le vin. Notre étudiant ne se découragea pas pour autant, il mélangea sa bière, avec une lichette de rosé, les bulles du perrier et un soupçon de grenadine et lui tendit ce verre avec un sourire ravageur.</p>
+          <p>C'est comme ça que Fontène est née, un peu de chaleur, beaucoup de convivialité, énormément d'amour !</p>
+        </div>
+      </div>
+      <div class="fable-body">
+        <p>Cette histoire, c'est celle de <strong>Thomas</strong>, fraîchement diplômé en œnologie. Dans les années 2000, il prépare en terrasse ce cocktail pour celle qui est aujourd'hui encore sa femme.</p>
+        <p>Fontène, qui n'existe alors pas sous ce nom, se veut être une boisson alternative aux alcools traditionnels : innovante et en avance sur son temps. Malgré le succès local indéniable que rencontre la boisson, elle n'ose pas se projeter à l'échelle nationale.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="crowd-divider">
+    <img src="https://i.ibb.co/V0ypFXsr/IMG-0165.jpg" alt="La communauté fontène"/>
+    <div class="crowd-divider-overlay"></div>
+  </div>
+
+  <section class="two-col-section" style="background:#fff;">
+    <div class="sticky-label">
+      <div class="section-tag">Chronologie</div>
+      <h2>De la<br>terrasse au<br><em>marché</em></h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2000s</div>
+        <div class="timeline-content"><h3>La recette de Thomas</h3><p>Un soir au bord de la Garonne, un jeune œnologue improvise un cocktail pétillant. La recette reste dans la famille, transmise avec amour.</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">~2005</div>
+        <div class="timeline-content"><h3>Un succès local discret</h3><p>Thomas commence à produire plus sérieusement sa boisson. Le succès est indéniable localement, mais la projection nationale semble encore lointaine.</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2022</div>
+        <div class="timeline-content"><h3>Les neveux reprennent le flambeau</h3><p>Avec l'essor des hard-seltzers et le retour du cidre, ses trois neveux en sont convaincus : <em>c'est le moment</em>. Ils créent <strong>Fontène</strong>.</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-content"><h3>Le lancement national</h3><p>Fontène se prépare à conquérir les terrasses, les bars et les festivals à l'échelle nationale.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="engagement-section" id="engagement">
+    <div class="engagement-header">
+      <div class="engagement-header-left">
+        <div class="section-tag">Notre engagement</div>
+        <h2>Pétiller<br><em>responsable</em></h2>
+      </div>
+      <p class="engagement-intro">Fontène est née d'une conviction simple : on peut faire une boisson délicieuse sans faire de compromis sur l'essentiel. Nos engagements font partie de l'ADN de la marque depuis le premier jour.</p>
+    </div>
+    <div class="engagement-grid">
+      <div class="engagement-card"><h3>Packaging 100 % recyclable</h3><p>Cannette aluminium recyclable à l'infini. Chaque cannette consommée peut devenir une nouvelle cannette.</p></div>
+      <div class="engagement-card"><h3>Sourcing local & tracé</h3><p>Nos ingrédients sont sourcés en France, chez des producteurs avec qui nous entretenons une relation directe.</p></div>
+      <div class="engagement-card"><h3>Zéro sucre ajouté</h3><p>Aucun sucre ajouté, aucun édulcorant artificiel. Juste les arômes naturels et la légèreté des bulles.</p></div>
+      <div class="engagement-card"><h3>Empreinte carbone réduite</h3><p>Distribution locale en priorité, partenariats avec des transporteurs basse émission.</p></div>
+      <div class="engagement-card"><h3>Une marque qui partage</h3><p>1 % de notre chiffre d'affaires est reversé à des associations locales qui œuvrent pour le lien social.</p></div>
+      <div class="engagement-card"><h3>Artisanat & authenticité</h3><p>Notre identité visuelle est entièrement dessinée à la main. Chaque trait reflète l'humain derrière la marque.</p></div>
+    </div>
+  </section>
+
+  <section class="two-col-section" style="border-bottom:none;">
+    <div class="sticky-label">
+      <div class="section-tag">Les fondateurs</div>
+      <h2>Trois neveux,<br>une <em>recette</em></h2>
+    </div>
+    <div class="founders-content">
+      <p>Quand on a découvert la boisson de notre oncle Thomas, on a immédiatement compris que quelque chose d'unique dormait là, attendant d'être réveillé au bon moment.</p>
+      <p>En 2022, le marché des boissons alternatives explose. Les hard-seltzers, les néo-brasseries, le retour du cidre — le public est prêt pour une boisson différente, honnête, avec une vraie histoire.</p>
+      <p><strong>Fontène, c'est cette histoire-là.</strong> Celle d'une recette familiale qu'on a voulu faire vivre à grande échelle, sans en trahir l'esprit.</p>
+      <p>Nous sommes trois, fraîchement diplômés, convaincus du potentiel inexploité de cette recette. On s'occupe du marketing, du commercial, de la communication — et on laisse Thomas s'occuper de ce qu'il fait mieux que personne : la boisson.</p>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Prêt à <em>pétiller</em><br>avec nous ?</h2>
+    <p>Rejoignez la liste des premiers à découvrir fontène avant tout le monde.</p>
+    <button class="btn-rose" onclick="showView('home'); setTimeout(scrollToForm, 100)">Rejoindre l'aventure</button>
+  </section>
+
+  <footer>
+    <img class="footer-logo" src="https://i.ibb.co/cS1ttMY9/IMG-0168.jpg" alt="fontène" onclick="showView('home')"/>
+    <span>© 2026 fontène — Tous droits réservés</span>
+    <span>Fait avec 🫧 en France</span>
+  </footer>
+</div>
+
+<script>
+  function showView(name, anchor) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + name);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (anchor) setTimeout(() => { const el = document.getElementById(anchor); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 80);
+    if (name === 'about') initTimelineObserver();
+    // GA4 virtual page view
+    gtag('event', 'page_view', {
+      'page_title': name === 'home' ? 'fontène - Accueil' : 'fontène - À propos',
+      'page_location': window.location.href + '#' + name,
+    });
+  }
+
+  const nav = document.getElementById('mainNav');
+  let lastY = 0, ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(() => { const y = window.scrollY; if (y > 120) nav.classList.toggle('hide', y > lastY); else nav.classList.remove('hide'); lastY = y; ticking = false; }); ticking = true; }
+  });
+
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); document.getElementById('hamburger').classList.toggle('open'); }
+
+  const outer = document.getElementById('hScrollOuter'), track = document.getElementById('hScrollTrack');
+  const dots = [document.getElementById('dot0'), document.getElementById('dot1'), document.getElementById('dot2')];
+  const hint = document.getElementById('scrollHint');
+  function updateHScroll() {
+    if (!outer || !track) return;
+    const rect = outer.getBoundingClientRect(), outerH = outer.offsetHeight, vpH = window.innerHeight;
+    const maxScroll = outerH - vpH; if (maxScroll <= 0) return;
+    const progress = Math.max(0, Math.min(1, -rect.top / maxScroll));
+    track.style.transform = `translateX(${-progress * 2 * window.innerWidth}px)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === Math.round(progress * 2)));
+    if (progress > 0.15) hint.classList.add('gone'); else hint.classList.remove('gone');
+  }
+  window.addEventListener('scroll', updateHScroll, { passive: true });
+  window.addEventListener('resize', updateHScroll);
+  updateHScroll();
+
+  function initTimelineObserver() {
+    const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
+    document.querySelectorAll('.timeline-item').forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+  }
+
+  function scrollToForm() {
+    const form = document.getElementById('formWrap');
+    if (!form) return;
+    // GA4 event: CTA click
+    gtag('event', 'select_content', {
+      'event_category': 'engagement',
+      'event_label': 'cta_rejoindre_aventure',
+    });
+    window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+    setTimeout(() => document.getElementById('emailInput').focus(), 500);
+  }
+
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyjmPyyhUxUuJlIOdIbsyRECNWT4k7WP_0w8Czgji2_gMfkKV_-4PGg2T-U72zkEThTKw/exec';
+
+  function handleSubmit() {
+    const input = document.getElementById('emailInput'), email = input.value.trim();
+    if (!email || !email.includes('@')) { input.style.outline = '2px solid #d9928f'; input.focus(); return; }
+    input.style.outline = '';
+    // GA4 event: lead capture
+    gtag('event', 'generate_lead', {
+      'event_category': 'engagement',
+      'event_label': 'email_inscription',
+    });
+    // Send email to Google Sheets via no-cors
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ email }),
+      headers: { 'Content-Type': 'application/json' }
+    }).catch(() => {
+      // Fallback: GET request
+      new Image().src = SHEET_URL + '?email=' + encodeURIComponent(email);
+    });
+    document.getElementById('formRow').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  }
+  document.getElementById('emailInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
+</script>
+</body>
+</html>
